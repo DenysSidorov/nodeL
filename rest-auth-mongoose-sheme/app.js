@@ -18,19 +18,15 @@ app.set('view engine', 'jade');
 var routes = require('./routes/items');
 //var users = require('./routes/users');
 
-
-var auth = function (req, res, next) {
-    function unauthorized(res) {
-        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-        return res.send(401);
-    };
-
-    return unauthorized(res)
-};
-
+// middleware которое отвечает за проверку и парсинг данных админа
+var auth  = require('./middlewares/adminPathAuth');
 app.use('/admin', auth);
 
-app.use('/', routes); //
+/* Тут как бы соеденили роуты
+* При помощи var router = express.Router(); - в файле routes
+* Получилось '/' + 'user'
+* */
+app.use('/', routes);
 //app.use('/users', users);
 // app.get('/', (req, res)=> res.end('cooll'));
 
