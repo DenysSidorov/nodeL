@@ -2,7 +2,10 @@ var logger = require('morgan'); // логирование
 var cookieParser = require('cookie-parser'); // парсить куки
 var bodyParser = require('body-parser'); // парсить тело форм и json
 var path = require ('path');
-var express = require('express');
+var express = require('express'); // framework express - класс!
+var mongoose = require("mongoose") // ORM для работы с данными из базы
+var session = require('express-session'); // middleware для работы с сессиями
+var MongoStore = require('connect-mongo')(session); // хранение сессии в mongoDB, не в Memory
 const app = express();
 
 app.use(logger('dev'));
@@ -15,19 +18,34 @@ app.use(express.static(path.join(__dirname, 'public'))); // установка �
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-var routes = require('./routes/items');
-//var users = require('./routes/users');
 
 // middleware которое отвечает за проверку и парсинг данных админа
 var auth  = require('./middlewares/adminPathAuth');
 app.use('/admin', auth);
 
+
+
+
+//...
+var url = "mongodb://localhost:27017/usersdb";
+app.use(session({
+    secret: 'i need more beers',
+    resave: false,
+    saveUninitialized: false, // позволяет быстро работать с хранилещем, сохранять уже зареганых
+    // Место хранения можно выбрать из множества вариантов, это и БД и файлы и Memcached.
+    store: new MongoStore({
+        url: url,
+    })
+}))
+
+var routes = require('./routes/items');
+var users = require('./routes/users');
 /* Тут как бы соеденили роуты
 * При помощи var router = express.Router(); - в файле routes
 * Получилось '/' + 'user'
 * */
-app.use('/', routes);
-//app.use('/users', users);
-// app.get('/', (req, res)=> res.end('cooll'));
+app.use('/items', routes);
+app.use('/users', users);
+app.get('/', (req, res)=> res.end('cooll'));
 
-app.listen(3000, ()=>{console.log('App - has started');})
+app.listen(3000, ()=>{console.log('App - has started');}) // Запуск сервера
