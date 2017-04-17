@@ -15,16 +15,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'))); // установка директории
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views')); // директория с шаблонами
 app.set('view engine', 'jade');
 
 
 // middleware которое отвечает за проверку и парсинг данных админа
 var auth  = require('./middlewares/adminPathAuth');
 app.use('/admin', auth);
-
-
-
 
 //...
 var url = "mongodb://localhost:27017/usersdb";
@@ -38,14 +35,15 @@ app.use(session({
     })
 }))
 
-var routes = require('./routes/items');
+var items = require('./routes/items');
 var users = require('./routes/users');
+var logRoute = require('./routes/');
 /* Тут как бы соеденили роуты
 * При помощи var router = express.Router(); - в файле routes
 * Получилось '/' + 'user'
 * */
-app.use('/items', routes);
+app.use('/items', items);
 app.use('/users', users);
-app.get('/', (req, res)=> res.end('cooll'));
+app.get('/', logRoute);
 
 app.listen(3000, ()=>{console.log('App - has started');}) // Запуск сервера

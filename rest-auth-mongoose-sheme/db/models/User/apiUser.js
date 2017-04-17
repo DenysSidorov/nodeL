@@ -1,8 +1,10 @@
-var mongoose = require('mongoose');
+// var mongoose = require('mongoose');
+// var db = mongoose.connect(url)
+// var url = "mongodb://localhost:27017/usersdb";
+
+var db = require('../../dbConnect').db;
 var crypto = require('crypto');
-var url = "mongodb://localhost:27017/usersdb";
-var db = mongoose.connect(url)
-var User = require('./db/models/User.js')
+var User = require('./User.js')
 
 // User API
 

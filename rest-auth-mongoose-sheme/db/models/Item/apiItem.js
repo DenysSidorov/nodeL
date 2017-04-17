@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 
-var url = "mongodb://localhost:27017/usersdb";
-var db = mongoose.connect(url);
+var db = require('../../dbConnect').db;
+
+// var db = mongoose.connect(url);
 
 var Item = require('./Item.js')
 
