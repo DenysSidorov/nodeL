@@ -6,6 +6,16 @@ import morgan from 'morgan'; //  Логирование
 import config from './config'; // Конфигурация
 const app = express(); // Запуск приложения
 
+import authRoute from './routes/auth';
+
+
+/** Подключение к базе данных mongodb*/
+mongoose.Promise = require('bluebird'); // Для асинхронного кода
+mongoose.connect(config.database, {}, err => {
+    if (err) throw err;
+    console.log(`Mongo connected!`);
+});
+
 /** Запуск приожения на порте*/
 app.listen(config.port, (err)=>{
     if (err) throw err;
@@ -20,14 +30,9 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
     secret: config.secret
-}))
+}));
+app.use('/api', authRoute);
+app.use(require('./middlewares/errors') ); // Обработчик ошибок должен быть последним
 
-/** Подключение к базе данных mongodb*/
-mongoose.connect(config.database, {}, err => {
-    if (err) throw err;
-    console.log(`Mongo connected!`);
-});
 
-app.get('*', async (req, resp)=>{
-    resp.end('Hello world')
-})
+
