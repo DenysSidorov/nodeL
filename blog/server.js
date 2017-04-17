@@ -6,6 +6,7 @@ import morgan from 'morgan'; //  Логирование
 
 import config from './config'; // Конфигурация
 import authRoute from './routes/auth';
+import userRoute from './routes/user';
 import checkToken from './middlewares/checkToken'; // Проверка налисия токена
 
 const app = express(); // Запуск приложения
@@ -33,9 +34,11 @@ app.use(session({
     secret: config.secret
 }));
 app.use('/api', authRoute); // singin singup
+app.use('/api', checkToken,  userRoute); // get user route
 app.get('/test', checkToken, (req, resp)=>{ // check token in headers
     resp.json('Success');
-})
+});
+
 app.use(require('./middlewares/errors') ); // Обработчик ошибок должен быть последним
 
 

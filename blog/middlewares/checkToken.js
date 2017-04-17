@@ -8,18 +8,24 @@ export default (req, resp, next)=>{
     const token =req.headers['authorization'];
     // Если токена нет:
     if(!token){
-        return resp.status(403)
-             .json({message: 'Forbidden. No token!'})
+        return next({
+            status: 403,
+            message: 'Forbidden. No Token'
+        })
     }
 
     // Если токен есть - проверяем его с секретным словом
     jwt.verify(token, config.secret , function(err, decoded) {
         if(err){
             const {message} = err;
-            return resp.status(400).json({message});
+            return next({
+                status: 400,
+                message
+            })
         }
         // Если токен нормальный - пропускаем - все ок
         console.log(decoded);
+        req.token = decoded; // ТЕПЕРЬ ВЕЗДЕ В REQUEST ЕСТЬ TOKEN
         next();
     });
 }

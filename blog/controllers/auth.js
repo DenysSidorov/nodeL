@@ -28,7 +28,6 @@ export const singup = async(req, resp, next) => {
         }
     })
 
-
 }
 
 export const singin = async(req, resp, next) => {
