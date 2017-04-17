@@ -1,3 +1,9 @@
-/**
- * Created by DenisMC on 4/17/2017.
- */
+import express from 'express';
+import * as AuthController from '../controllers/auth';
+
+const router = express.Router();
+
+router.post('/signin', AuthController.singin);
+router.post('/signup', AuthController.singup);
+
+export default router;
