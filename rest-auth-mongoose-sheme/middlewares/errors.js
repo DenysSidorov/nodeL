@@ -1,3 +1,11 @@
-/**
- * Created by DenisMC on 4/17/2017.
- */
+module.exports = function errors(err, req, resp, next){
+    if( !err){
+        next();
+    }else {
+        resp.status(500);
+        resp.json({
+            status: 500,
+            message: 'Server Error'
+        })
+    }
+}

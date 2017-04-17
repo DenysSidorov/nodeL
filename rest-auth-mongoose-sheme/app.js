@@ -45,5 +45,7 @@ var logRoute = require('./routes/');
 app.use('/items', items);
 app.use('/users', users);
 app.get('/', logRoute);
+var errMiddleware = require('./middlewares/errors');
+app.use(errMiddleware);
 
 app.listen(3000, ()=>{console.log('App - has started');}) // Запуск сервера
