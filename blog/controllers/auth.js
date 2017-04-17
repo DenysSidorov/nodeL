@@ -1,4 +1,6 @@
 import User from '../models/user';
+import jwt from 'jsonwebtoken'; // Генерация токена
+import config from '../config/index';
 
 export const singup = async(req, resp, next) => {
     let credentials = req.body; // Вытащим данные от юзера из формы.
@@ -37,8 +39,24 @@ export const singin = async(req, resp, next) => {
     const user = User.findOne({login})
         .then(user => {
             if (user.password == password) {
-                req.session.userId = user._id;
-                resp.json(user);
+
+
+                /** Преймущество токена в том,что его можно выдавать не только браузеру но и приложению
+                 * Первый параметр - то что будем хэшировать
+                 * Второй параметр - это ключ!
+                 * */
+                // req.session.userId = user._id;
+                // resp.json(user);
+
+                const token = jwt.sign({_id: user._id}, config.secret);
+                console.log(token);
+                resp.json(token);
+
+                /** Этот токен передается клиенту и при каждом обращении клиент должен его передавать серверу
+                 * в виде заголовка или в другом виде, может хранить его в куках
+                 * При обращении на закрытые роуты, можем написать middleware и читать у пользователя этот токен
+                 * */
+
             } else {
                 next({
                     status: 400,
@@ -46,10 +64,11 @@ export const singin = async(req, resp, next) => {
                 })
             }
         }).catch(err => {
-            // Если юзера не нашли - кидаем исключение
+            const {message} = err;
+            // Если юзера не нашли - 400
             return next({
                 status: 400,
-                message: 'User not found'
+                message: message || 'User not found'
             })
         });
 }
