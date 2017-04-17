@@ -9,7 +9,7 @@ export default (req, resp, next)=>{
     // Если токена нет:
     if(!token){
         return resp.status(403)
-            .json({message: 'Forbidden. No token!'})
+             .json({message: 'Forbidden. No token!'})
     }
 
     // Если токен есть - проверяем его с секретным словом
