@@ -8,6 +8,7 @@ import config from './config'; // Конфигурация
 import authRoute from './routes/auth';
 import userRoute from './routes/user';
 import pageRoute from './routes/page';
+
 import getUser from './middlewares/getUser'; // Проверка налисия токена
 import checkToken from './middlewares/checkToken'; // Проверка налисия токена
 
@@ -38,11 +39,12 @@ app.use(session({
 
 app.use('/api', authRoute); // singin singup
 app.use('/api', checkToken,  userRoute); // get user route
+app.use(getUser);
 app.use('/api', checkToken,  pageRoute); //
 app.get('/test', checkToken, (req, resp)=>{ // check token in headers
     resp.json('Success');
 });
-app.use(getUser);
+
 
 app.use(require('./middlewares/errors') ); // Обработчик ошибок должен быть последним
 
