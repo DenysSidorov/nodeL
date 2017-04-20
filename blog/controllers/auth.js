@@ -2,9 +2,9 @@ import User from '../models/user';
 import jwt from 'jsonwebtoken'; // Генерация токена
 import config from '../config/index';
 
-export const singup = async(req, resp, next) => {
+export const singup = (req, resp, next) => {
     let credentials = req.body; // Вытащим данные от юзера из формы.
-    console.log(credentials, credentials);
+    console.log(credentials, 'credentials');
     let user;
 
     // --- НЕ ЗАВЕЛОСЬ =(((

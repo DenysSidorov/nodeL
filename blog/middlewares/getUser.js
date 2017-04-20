@@ -4,6 +4,7 @@ export default (req, resp, next) => {
     let {token} = req;
     UserService.getUserByToken(token)
         .then(us => {
+            console.log('Получил пользователя', us);
             req.user = us;
             next();
         })
